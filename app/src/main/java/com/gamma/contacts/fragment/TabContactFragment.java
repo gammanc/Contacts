@@ -1,22 +1,27 @@
-package com.gamma.contacts;
+package com.gamma.contacts.fragment;
 
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatDelegate;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.gamma.contacts.R;
 import com.gamma.contacts.adapter.ViewPagerAdapter;
-import com.gamma.contacts.fragment.FavoriteListFragment;
-import com.gamma.contacts.fragment.ListContactFragment;
 
-public class MainActivity extends AppCompatActivity {
+/**
+ * Created by emers on 1/5/2018.
+ */
 
+public class TabContactFragment extends Fragment {
+
+    private View view;
     private TabLayout main_tab;
     private ViewPager main_viewpager;
     private ViewPagerAdapter adapter;
@@ -25,24 +30,24 @@ public class MainActivity extends AppCompatActivity {
     private ListContactFragment fragment_main;
     private FavoriteListFragment fragment_favs;
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        //TODO: Obtener los contactos del sistema
-        //prepareContacts();
-        //prepareTabs();
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.fragment_tab_contact, container, false);
+        prepareTabs();
+        return view;
     }
 
-    public void prepareContacts(){
-
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
     public void prepareTabs(){
-        main_tab = findViewById(R.id.main_tablayout);
-        main_viewpager = findViewById(R.id.main_viewpager);
-        fab_addPerson = findViewById(R.id.fab_addperson);
-        adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        main_tab = view.findViewById(R.id.main_tablayout);
+        main_viewpager = view.findViewById(R.id.main_viewpager);
+        fab_addPerson = view.findViewById(R.id.fab_addperson);
+        adapter = new ViewPagerAdapter(getFragmentManager());
 
         //Eliminado la sombra del ActionBar para Android 5+
         //Para versiones anteriores, en el archivo styles agregar

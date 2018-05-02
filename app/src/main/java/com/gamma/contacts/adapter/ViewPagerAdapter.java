@@ -56,6 +56,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         return obj;
     }
 
+
     public Fragment getFragment(int position){
         String tag = frTags.get(position);
         if(tag == null) return  null;
