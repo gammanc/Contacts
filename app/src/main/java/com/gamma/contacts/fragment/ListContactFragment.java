@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -90,12 +91,21 @@ public class ListContactFragment extends Fragment implements ContactsAdapter.Con
 
     //Implementando metodos de interfaz
     @Override
-    public void onContactChecked(View v, int position, boolean checked) {
-        if(checked){
+    public void onContactChecked(View v, int position) {
+        ImageView button = (ImageView) v.findViewById(R.id.btn_favorite);
+
+        String tag = button.getTag().toString();
+
+        if(tag.equalsIgnoreCase("inactive")){
             sharedPreference.addFavorite(activity, mContacts.get(position));
             Toast.makeText(activity, "Añadido a Favoritos", Toast.LENGTH_SHORT).show();
-        } else {
+
+            button.setTag("active");
+            button.setImageResource(R.drawable.ic_star);
+        }else {
             sharedPreference.removeFavorite(activity, mContacts.get(position));
+            button.setTag("inactive");
+            button.setImageResource(R.drawable.ic_star_border);
             Toast.makeText(activity, "Eliminado de Favoritos", Toast.LENGTH_SHORT).show();
         }
     }

@@ -6,9 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
 import com.gamma.contacts.R;
 import com.gamma.contacts.beans.Contact;
@@ -30,7 +29,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
     //Interfaz necesaria para manejar eventos
     private ContactsClickListener mListener;
     public interface ContactsClickListener{
-        public void onContactChecked(View v, int position, boolean checked);
+        public void onContactChecked(View v, int position);
         public void onContactClick(View v, int position);
     }
 
@@ -47,7 +46,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
         View itemView;
         CardView card;
         TextView txtName, txtPhone;
-        ToggleButton btnFav;
+        ImageView btnFav;
 
         public ContactViewHolder(View itemView) {
             super(itemView);
@@ -55,7 +54,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
             card = itemView.findViewById(R.id.item_cardview);
             txtName = itemView.findViewById(R.id.txt_name);
             txtPhone = itemView.findViewById(R.id.txt_number);
-            btnFav = itemView.findViewById(R.id.btn_fav);
+            btnFav = itemView.findViewById(R.id.btn_favorite);
         }
     }
 
@@ -71,12 +70,20 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
         final Contact contact = mContacts.get(position);
         holder.txtName.setText(contact.getmName());
         holder.txtPhone.setText(contact.getmNumber());
-        holder.btnFav.setChecked(checkFavoriteItem(contact));
 
-        holder.btnFav.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        if(checkFavoriteItem(contact)){
+            holder.btnFav.setImageResource(R.drawable.ic_star);
+            holder.btnFav.setTag("active");
+        } else{
+            holder.btnFav.setImageResource(R.drawable.ic_star_border);
+            holder.btnFav.setTag("inactive");
+
+        }
+        holder.card.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mListener.onContactChecked(holder.itemView, position, isChecked);
+            public boolean onLongClick(View v) {
+                mListener.onContactChecked(v, position);
+                return true;
             }
         });
     }

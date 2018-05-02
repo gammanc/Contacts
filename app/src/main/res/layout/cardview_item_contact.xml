@@ -11,17 +11,13 @@
     android:elevation="6dp"
     app:cardCornerRadius="5dp"
     app:cardBackgroundColor="@color/colorPrimaryDark">
-    <ToggleButton
-        android:id="@+id/btn_fav"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:background="@drawable/button_favorite"
-        android:layout_margin="4dp"
+    <ImageView
+        android:id="@+id/btn_favorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:checked="false"
-        android:text=""
-        android:textOff=""
-        android:textOn=""/>
+        android:background="@null"
+        android:contentDescription="@string/favorites" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
