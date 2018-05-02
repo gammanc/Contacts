@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import com.gamma.contacts.R;
 import com.gamma.contacts.adapter.ContactsAdapter;
@@ -118,10 +116,7 @@ public class ListContactFragment extends Fragment implements ContactsAdapter.Con
     @Override
     public void onResume() {
         //TODO: Obtener los contactos del sistema
-        setExampleContacts();
-
-        contactsAdapter = new ContactsAdapter(activity, mContacts, this);
-        contactListView.setAdapter(contactsAdapter);
+        contactsAdapter.notifyDataSetChanged();
         super.onResume();
     }
 }

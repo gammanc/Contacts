@@ -56,9 +56,6 @@ public class MainActivity extends AppCompatActivity {
         main_viewpager.setAdapter(adapter);
         main_tab.setupWithViewPager(main_viewpager);
 
-        //main_tab.getTabAt(0).setIcon(R.drawable.ic_movie);
-        main_tab.getTabAt(1).setIcon(R.drawable.ic_star);
-
         main_viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

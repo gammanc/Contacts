@@ -46,7 +46,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
         View itemView;
         CardView card;
         TextView txtName, txtPhone;
-        ImageView btnFav;
+        ImageView imgPicture, btnFav;
 
         public ContactViewHolder(View itemView) {
             super(itemView);
@@ -55,9 +55,9 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
             txtName = itemView.findViewById(R.id.txt_name);
             txtPhone = itemView.findViewById(R.id.txt_number);
             btnFav = itemView.findViewById(R.id.btn_favorite);
+            imgPicture = itemView.findViewById(R.id.img_picture);
         }
     }
-
 
     @Override
     public ContactViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -70,6 +70,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
         final Contact contact = mContacts.get(position);
         holder.txtName.setText(contact.getmName());
         holder.txtPhone.setText(contact.getmNumber());
+        holder.imgPicture.setImageResource(R.drawable.ic_contact);
 
         if(checkFavoriteItem(contact)){
             holder.btnFav.setImageResource(R.drawable.ic_star);
@@ -106,6 +107,10 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
             check = favorites.contains(checkContact);
         }
         return check;
+    }
+
+    public void update(){
+        notifyDataSetChanged();
     }
 
     public void remove(Contact contact) {
