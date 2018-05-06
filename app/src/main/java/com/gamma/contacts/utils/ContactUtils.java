@@ -55,7 +55,6 @@ public class ContactUtils {
     private Contact mContact;
     private void loadDeviceContacts(){
         mContacts = new ArrayList<>();
-        System.out.println("Llegué inicio del cursor");
         ContentResolver contentResolver = context.getContentResolver();
         String sort = ContactsContract.Contacts.DISPLAY_NAME + " ASC";
         Cursor cursor = contentResolver.query(
@@ -71,7 +70,6 @@ public class ContactUtils {
                 mContact = new Contact();
                 mContact.setmId(cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID)));
                 mContact.setmName(cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
-                System.out.println("Id y nombre verificados, buscando numero");
                 int hasPhoneNumber = Integer.valueOf(cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)));
                 if (hasPhoneNumber > 0) retrievePhone(contentResolver);
                 retrieveEmail(contentResolver);
@@ -81,14 +79,12 @@ public class ContactUtils {
 
                 mContacts.add(mContact);
             }
-            System.out.println("Llegué al final del cursor");
         }
         cursor.close();
     }
 
     private void retrievePhone(ContentResolver contentResolver) {
         String phoneNumber="";
-        System.out.println("Tengo lista la query, voy a proceder");
         Cursor cursor  = contentResolver.query(
                 ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
                 null,
@@ -96,12 +92,10 @@ public class ContactUtils {
                 new String[]{String.valueOf(mContact.getmId())},
                 null
         );
-        System.out.println("Tengo el numero, asignando...");
 
         while (cursor.moveToNext()) {
             phoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
         }
-        System.out.println("Aqui voy bien, numero obtenido");
         mContact.setmNumber(phoneNumber);
         cursor.close();
     }
@@ -164,8 +158,6 @@ public class ContactUtils {
         cursor.close();
         mContact.setmBirthday(birthday);
     }
-
-
 
     /* Acorde a la documentación de Android :
     *  Devuelve la versión thumnail de la foto de contacto

@@ -119,7 +119,7 @@ public class ListContactFragment extends Fragment implements ContactsAdapter.Con
         DetailContactFragment addContactFragment = new DetailContactFragment();
 
         Bundle bundle = new Bundle();
-        bundle.putString("contact_id", mContacts.get(position).getmId());
+        bundle.putParcelable("contact", mContacts.get(position));
         addContactFragment.setArguments(bundle);
 
         ft2.addToBackStack(AddContactFragment.ARG_ITEM_ID);
