@@ -71,7 +71,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
         final Contact contact = mContacts.get(position);
         holder.txtName.setText(contact.getmName());
         holder.txtPhone.setText(contact.getmNumber());
-        holder.imgPicture.setImageResource(R.drawable.ic_contact);
+        //holder.imgPicture.setImageResource(R.drawable.ic_contact);
+        holder.imgPicture.setImageDrawable(contact.getRoundedThumbnail(mContext));
 
         if(checkFavoriteItem(contact)){
             holder.btnFav.setImageResource(R.drawable.ic_star);
@@ -81,6 +82,14 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
             holder.btnFav.setTag("inactive");
 
         }
+
+        holder.card.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onContactClick(v, position);
+            }
+        });
+
         holder.card.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {

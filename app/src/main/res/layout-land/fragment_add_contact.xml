@@ -57,7 +57,7 @@
                             android:layout_height="24dp"
                             android:layout_gravity="center"
                             android:layout_marginRight="32dp"
-                            app:srcCompat="@drawable/ic_person"/>
+                            app:srcCompat="@drawable/ic_people"/>
                         <android.support.design.widget.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"

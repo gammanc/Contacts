@@ -2,14 +2,12 @@ package com.gamma.contacts.fragment;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.ContentResolver;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -113,7 +111,21 @@ public class ListContactFragment extends Fragment implements ContactsAdapter.Con
 
     @Override
     public void onContactClick(View v, int position) {
+        FragmentManager fm2 = getFragmentManager();
+        FragmentTransaction ft2 = fm2.beginTransaction();
+        ft2.setCustomAnimations(R.anim.slide_in_down, R.anim.slide_out_down,
+                R.anim.slide_in_down, R.anim.slide_out_down);
 
+        DetailContactFragment addContactFragment = new DetailContactFragment();
+
+        Bundle bundle = new Bundle();
+        bundle.putString("contact_id", mContacts.get(position).getmId());
+        addContactFragment.setArguments(bundle);
+
+        ft2.addToBackStack(AddContactFragment.ARG_ITEM_ID);
+        ft2.hide(ListContactFragment.this);
+        ft2.add(R.id.contentFrame, addContactFragment);
+        ft2.commit();
     }
 
     @Override

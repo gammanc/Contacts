@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
 
     public static AppCompatActivity appActivity;
 
+
     private TabContactFragment tabContactFragment;
     private DetailContactFragment detailContactFragment;
     private Fragment contentF;
@@ -34,10 +35,13 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.PartyTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         appActivity = this;
+
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 
         mainToolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(mainToolbar);

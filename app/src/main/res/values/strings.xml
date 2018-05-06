@@ -9,4 +9,5 @@
     <string name="form_address">Dirección</string>
     <string name="form_birthday">Cumpleaños</string>
     <string name="pick_date">Seleccionar fecha</string>
+    <string name="image_picture">Imagen de Usuario</string>
 </resources>
