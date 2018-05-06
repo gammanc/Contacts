@@ -3,86 +3,117 @@ package com.gamma.contacts;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatDelegate;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Toast;
 
 import com.gamma.contacts.adapter.ViewPagerAdapter;
+import com.gamma.contacts.fragment.DetailContactFragment;
 import com.gamma.contacts.fragment.FavoriteListFragment;
 import com.gamma.contacts.fragment.ListContactFragment;
+import com.gamma.contacts.fragment.TabContactFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener{
 
-    private TabLayout main_tab;
-    private ViewPager main_viewpager;
-    private ViewPagerAdapter adapter;
-    private FloatingActionButton fab_addPerson;
+    private TabContactFragment tabContactFragment;
+    private DetailContactFragment detailContactFragment;
 
-    private ListContactFragment fragment_main;
-    private FavoriteListFragment fragment_favs;
+    private Fragment contentF;
+    private FragmentManager fragmentManager;
+
+    Toolbar mainToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //TODO: Obtener los contactos del sistema
-        //prepareContacts();
-        //prepareTabs();
+
+        mainToolbar = findViewById(R.id.main_toolbar);
+        setSupportActionBar(mainToolbar);
+
+        fragmentManager = getSupportFragmentManager();
+        fragmentManager.addOnBackStackChangedListener(this);
+        if(savedInstanceState != null){
+            if(savedInstanceState.containsKey("myContent")){
+                String content = savedInstanceState.getString("myContent");
+                if(content.equals(DetailContactFragment.ARG_ITEM_ID)){
+                    if(fragmentManager.findFragmentByTag(DetailContactFragment.ARG_ITEM_ID) != null){
+                        contentF = fragmentManager.findFragmentByTag(DetailContactFragment.ARG_ITEM_ID);
+                    }
+                }
+            }
+
+            if(fragmentManager.findFragmentByTag(TabContactFragment.ARG_ITEM_ID) != null){
+                tabContactFragment = (TabContactFragment) fragmentManager.findFragmentByTag(TabContactFragment.ARG_ITEM_ID);
+                contentF = tabContactFragment;
+            }
+        } else {
+            tabContactFragment = new TabContactFragment();
+            setTitle(R.string.app_name);
+            switchContent(tabContactFragment, TabContactFragment.ARG_ITEM_ID);
+        }
     }
 
-    public void prepareContacts(){
-
+    public void setTitle(int resource){
+        getSupportActionBar().setTitle(getResources().getString(resource));
     }
 
-    public void prepareTabs(){
-        main_tab = findViewById(R.id.main_tablayout);
-        main_viewpager = findViewById(R.id.main_viewpager);
-        fab_addPerson = findViewById(R.id.fab_addperson);
-        adapter = new ViewPagerAdapter(getSupportFragmentManager());
+    //NAVEGACIÓN
+    public void switchContent(Fragment fragment, String tag) {
+        while (fragmentManager.popBackStackImmediate());
 
-        //Eliminado la sombra del ActionBar para Android 5+
-        //Para versiones anteriores, en el archivo styles agregar
-        //<item name="android:windowContentOverlay">@null</item>
-        //getSupportActionBar().setElevation(0);
+        if (fragment != null){
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.setCustomAnimations(R.anim.slide_in_down, R.anim.slide_out_up,
+                    R.anim.slide_in_down, R.anim.slide_out_up);
+            transaction.replace(R.id.contentFrame, fragment, tag);
 
-        //TODO: compartir con los fragment la lista de contactos
-
-        fragment_main = new ListContactFragment();
-        fragment_favs = new FavoriteListFragment();
-
-        adapter.addFragment(fragment_main, getResources().getString(R.string.tab_contacts));
-        adapter.addFragment(fragment_favs, getResources().getString(R.string.tab_favorites));
-
-        main_viewpager.setAdapter(adapter);
-        main_tab.setupWithViewPager(main_viewpager);
-
-        main_viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+            //Si no es TabContact, se agrega al backStack
+            if(!(fragment instanceof TabContactFragment)){
+                transaction.addToBackStack(tag);
             }
+            transaction.commit();
+            contentF = fragment;
+        }
+    }
 
-            @Override
-            public void onPageSelected(int position) {
-                Fragment fragment = adapter.getFragment(position);
-                fragment.onResume();
-            }
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        if( contentF instanceof DetailContactFragment) outState.putString("myContent", DetailContactFragment.ARG_ITEM_ID);
+        else outState.putString("myContent", TabContactFragment.ARG_ITEM_ID);
 
-            @Override
-            public void onPageScrollStateChanged(int state) {
+        super.onSaveInstanceState(outState);
+    }
 
-            }
-        });
+    @Override
+    public void onBackPressed() {
+        navigate();
+    }
 
-        fab_addPerson.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(v.getContext(), "This WILL work", Toast.LENGTH_SHORT).show();
-            }
-        });
+    @Override
+    public void onBackStackChanged() {
+        getSupportActionBar().setDisplayHomeAsUpEnabled(fragmentManager.getBackStackEntryCount()>0);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        navigate();
+        return true;
+    }
+
+    public void navigate(){
+        if (fragmentManager.getBackStackEntryCount() > 0) {
+            super.onBackPressed();
+        } else if (contentF instanceof TabContactFragment
+                || fragmentManager.getBackStackEntryCount() == 0) {
+            finish();
+        }
     }
 }

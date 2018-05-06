@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,7 +33,7 @@ public class FavoriteListFragment extends Fragment implements ContactsAdapter.Co
 
     SharedPreference sharedPreference;
     ArrayList<Contact> mFavContacts;
-    GridLayoutManager gManager;
+    LinearLayoutManager gManager;
 
     RecyclerView contactListView;
 
@@ -60,10 +60,9 @@ public class FavoriteListFragment extends Fragment implements ContactsAdapter.Co
             }
             contactListView = v.findViewById(R.id.main_recycler);
             if(mFavContacts != null) {
-                printFavorites();
                 contactListView.setHasFixedSize(true);
 
-                gManager = new GridLayoutManager(container.getContext(), 3);
+                gManager = new LinearLayoutManager(container.getContext());
                 contactListView.setLayoutManager(gManager);
 
                 adapter = new ContactsAdapter(activity, mFavContacts, this);
@@ -118,7 +117,7 @@ public class FavoriteListFragment extends Fragment implements ContactsAdapter.Co
                 //TODO: hacer algo si noy hay favoritos
             }
             if(mFavContacts != null) {
-                printFavorites();
+                //printFavorites();
                 adapter = new ContactsAdapter(activity, mFavContacts, this);
                 contactListView.setAdapter(adapter);
             }

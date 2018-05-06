@@ -1,11 +1,16 @@
 package com.gamma.contacts.fragment;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +21,7 @@ import android.widget.Toast;
 import com.gamma.contacts.R;
 import com.gamma.contacts.adapter.ContactsAdapter;
 import com.gamma.contacts.beans.Contact;
+import com.gamma.contacts.utils.Permissions;
 import com.gamma.contacts.utils.SharedPreference;
 
 import java.util.ArrayList;
@@ -32,7 +38,7 @@ public class ListContactFragment extends Fragment implements ContactsAdapter.Con
     RecyclerView contactListView;
     ArrayList<Contact> mContacts;
     ContactsAdapter contactsAdapter;
-    GridLayoutManager gManager;
+    LinearLayoutManager gManager;
 
     SharedPreference sharedPreference;
 
@@ -41,6 +47,17 @@ public class ListContactFragment extends Fragment implements ContactsAdapter.Con
         super.onCreate(savedInstanceState);
         activity = getActivity();
         sharedPreference = new SharedPreference();
+
+        if(savedInstanceState != null){
+            mContacts = savedInstanceState.getParcelableArrayList("contacts");
+        } else {
+            if(Permissions.hasPermission(activity, Manifest.permission.READ_CONTACTS)){
+                mContacts = new ArrayList<Contact>();
+                loadContactList();
+            } else {
+                Permissions.requestPermissions(this, new String[] {Manifest.permission.READ_CONTACTS}, Permissions.READ_CONTACTS_CODE);
+            }
+        }
     }
 
     @Nullable
@@ -52,16 +69,53 @@ public class ListContactFragment extends Fragment implements ContactsAdapter.Con
         contactListView = v.findViewById(R.id.main_recycler);
         contactListView.setHasFixedSize(true);
 
-        gManager = new GridLayoutManager(container.getContext(), 3);
+        gManager = new LinearLayoutManager(container.getContext());
         contactListView.setLayoutManager(gManager);
 
         //TODO: Obtener los contactos del sistema
-        setExampleContacts();
+        //setExampleContacts();
 
         contactsAdapter = new ContactsAdapter(activity, mContacts, this);
         contactListView.setAdapter(contactsAdapter);
 
         return v;
+    }
+
+    private void loadContactList() {
+        mContacts = new ArrayList<>();
+        ContentResolver contentResolver = activity.getContentResolver();
+        Cursor cursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+        Cursor phoneCursor;
+        String id, name, phoneNumber = "";
+
+        if (cursor.getCount() > 0) {
+            while (cursor.moveToNext()) {
+                id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+                name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                int hasPhoneNumber = Integer.parseInt(cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)));
+                if (hasPhoneNumber > 0) {
+                    phoneCursor = contentResolver.query(
+                            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                            null,
+                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+                            new String[]{id},
+                            null
+                    );
+                    while (phoneCursor.moveToNext()) {
+                        phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                    }
+                    phoneCursor.close();
+                }
+                mContacts.add(new Contact(Integer.valueOf(id), name, phoneNumber));
+            }
+        }
+        cursor.close();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("contacts", (ArrayList) mContacts);
     }
 
     public void setExampleContacts(){

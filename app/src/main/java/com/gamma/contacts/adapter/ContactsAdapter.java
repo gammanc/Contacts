@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.gamma.contacts.R;
@@ -44,7 +45,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
     //Subclase para ViewHolder
     public static class ContactViewHolder extends RecyclerView.ViewHolder{
         View itemView;
-        CardView card;
+        RelativeLayout card;
         TextView txtName, txtPhone;
         ImageView imgPicture, btnFav;
 
@@ -85,6 +86,13 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
             public boolean onLongClick(View v) {
                 mListener.onContactChecked(v, position);
                 return true;
+            }
+        });
+
+        holder.btnFav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onContactChecked(v,position);
             }
         });
     }

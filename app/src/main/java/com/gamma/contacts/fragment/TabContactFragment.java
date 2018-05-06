@@ -6,6 +6,8 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +23,8 @@ import com.gamma.contacts.adapter.ViewPagerAdapter;
 
 public class TabContactFragment extends Fragment {
 
+    public static final String ARG_ITEM_ID = "tab_contact_list";
+
     private View view;
     private TabLayout main_tab;
     private ViewPager main_viewpager;
@@ -29,6 +33,8 @@ public class TabContactFragment extends Fragment {
 
     private ListContactFragment fragment_main;
     private FavoriteListFragment fragment_favs;
+
+    FragmentManager fm2;
 
     @Nullable
     @Override
@@ -74,7 +80,7 @@ public class TabContactFragment extends Fragment {
             @Override
             public void onPageSelected(int position) {
                 Fragment fragment = adapter.getFragment(position);
-                fragment.onResume();
+                if(fragment != null) fragment.onResume();
             }
 
             @Override
@@ -86,8 +92,17 @@ public class TabContactFragment extends Fragment {
         fab_addPerson.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), "This WILL work", Toast.LENGTH_SHORT).show();
+                fm2 = getFragmentManager();
+                FragmentTransaction ft2 = fm2.beginTransaction();
+                ft2.setCustomAnimations(R.anim.slide_in_down, R.anim.slide_out_down,
+                        R.anim.slide_in_down, R.anim.slide_out_down);
+                AddContactFragment addContactFragment = new AddContactFragment();
+                ft2.addToBackStack(AddContactFragment.ARG_ITEM_ID);
+                ft2.hide(TabContactFragment.this);
+                ft2.add(R.id.contentFrame, addContactFragment);
+                ft2.commit();
             }
         });
     }
+
 }

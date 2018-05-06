@@ -3,7 +3,8 @@
     <color name="colorPrimary">#393939</color>
     <color name="colorPrimaryDark">#2f2f2f</color>
     <color name="colorAccent">#00b8d4</color>
-    <color name="colorBackFragment">#e0e0e0</color>
+    <color name="colorBackFragment">#ffffff</color>
     <color name="colorTextWhite">#000</color>
     <color name="colorTextSoftW">#616161</color>
+    <color name="colorIcons">#7D7D7D</color>
 </resources>

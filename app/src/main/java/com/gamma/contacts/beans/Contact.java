@@ -1,10 +1,13 @@
 package com.gamma.contacts.beans;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by emers on 30/4/2018.
  */
 
-public class Contact {
+public class Contact implements Parcelable{
     private int mId;
     private String mName, mNumber;
 
@@ -15,6 +18,38 @@ public class Contact {
         this.mName = mName;
         this.mNumber = mNumber;
     }
+
+    protected Contact(Parcel in) {
+        mId = in.readInt();
+        mName = in.readString();
+        mNumber = in.readString();
+    }
+
+    //Implementando metodos de Parcelable
+    public static final Creator<Contact> CREATOR = new Creator<Contact>() {
+        @Override
+        public Contact createFromParcel(Parcel in) {
+            return new Contact(in);
+        }
+
+        @Override
+        public Contact[] newArray(int size) {
+            return new Contact[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(mId);
+        dest.writeString(mName);
+        dest.writeString(mNumber);
+    }
+    //--Metodos Parcelable
 
     public int getmId() {
         return mId;
