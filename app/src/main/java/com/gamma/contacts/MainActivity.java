@@ -1,5 +1,6 @@
 package com.gamma.contacts;
 
+import android.content.Context;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -22,18 +23,21 @@ import com.gamma.contacts.fragment.TabContactFragment;
 
 public class MainActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener{
 
+    public static AppCompatActivity appActivity;
+
     private TabContactFragment tabContactFragment;
     private DetailContactFragment detailContactFragment;
-
     private Fragment contentF;
     private FragmentManager fragmentManager;
 
-    Toolbar mainToolbar;
+    private Toolbar mainToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        appActivity = this;
 
         mainToolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(mainToolbar);
@@ -115,5 +119,9 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
                 || fragmentManager.getBackStackEntryCount() == 0) {
             finish();
         }
+    }
+
+    public static Context getContext(){
+        return appActivity.getApplicationContext();
     }
 }

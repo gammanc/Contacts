@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.gamma.contacts.R;
 import com.gamma.contacts.adapter.ContactsAdapter;
 import com.gamma.contacts.beans.Contact;
+import com.gamma.contacts.utils.ContactUtils;
 import com.gamma.contacts.utils.Permissions;
 import com.gamma.contacts.utils.SharedPreference;
 
@@ -52,8 +53,8 @@ public class ListContactFragment extends Fragment implements ContactsAdapter.Con
             mContacts = savedInstanceState.getParcelableArrayList("contacts");
         } else {
             if(Permissions.hasPermission(activity, Manifest.permission.READ_CONTACTS)){
-                mContacts = new ArrayList<Contact>();
-                loadContactList();
+                mContacts = ContactUtils.getInstace().getContactList();//new ArrayList<Contact>();
+                //loadContactList();
             } else {
                 Permissions.requestPermissions(this, new String[] {Manifest.permission.READ_CONTACTS}, Permissions.READ_CONTACTS_CODE);
             }
@@ -81,64 +82,12 @@ public class ListContactFragment extends Fragment implements ContactsAdapter.Con
         return v;
     }
 
-    private void loadContactList() {
-        mContacts = new ArrayList<>();
-        ContentResolver contentResolver = activity.getContentResolver();
-        Cursor cursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
-        Cursor phoneCursor;
-        String id, name, phoneNumber = "";
 
-        if (cursor.getCount() > 0) {
-            while (cursor.moveToNext()) {
-                id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
-                name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                int hasPhoneNumber = Integer.parseInt(cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)));
-                if (hasPhoneNumber > 0) {
-                    phoneCursor = contentResolver.query(
-                            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                            null,
-                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
-                            new String[]{id},
-                            null
-                    );
-                    while (phoneCursor.moveToNext()) {
-                        phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                    }
-                    phoneCursor.close();
-                }
-                mContacts.add(new Contact(Integer.valueOf(id), name, phoneNumber));
-            }
-        }
-        cursor.close();
-    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList("contacts", (ArrayList) mContacts);
-    }
-
-    public void setExampleContacts(){
-        mContacts = new ArrayList<Contact>();
-        mContacts.add(new Contact(1, "Contacto 1", "7878 7878"));
-        mContacts.add(new Contact(2, "Contacto 2", "7878 7878"));
-        mContacts.add(new Contact(3, "Contacto 3", "7878 7878"));
-        mContacts.add(new Contact(4, "Contacto 4", "7878 7878"));
-        mContacts.add(new Contact(5, "Contacto 5", "7878 7878"));
-        mContacts.add(new Contact(6, "Contacto 6", "7878 7878"));
-        mContacts.add(new Contact(7, "Contacto 7", "7878 7878"));
-        mContacts.add(new Contact(8, "Contacto 8", "7878 7878"));
-        mContacts.add(new Contact(9, "Contacto 9", "7878 7878"));
-        mContacts.add(new Contact(10, "Contacto 10", "7878 7878"));
-        mContacts.add(new Contact(11, "Contacto 11", "7878 7878"));
-        mContacts.add(new Contact(12, "Contacto 12", "7878 7878"));
-        mContacts.add(new Contact(13, "Contacto 13", "7878 7878"));
-        mContacts.add(new Contact(14, "Contacto 14", "7878 7878"));
-        mContacts.add(new Contact(15, "Contacto 15", "7878 7878"));
-        mContacts.add(new Contact(16, "Contacto 16", "7878 7878"));
-        mContacts.add(new Contact(17, "Contacto 17", "7878 7878"));
-        mContacts.add(new Contact(18, "Contacto 18", "7878 7878"));
-        mContacts.add(new Contact(19, "Contacto 19", "7878 7878"));
     }
 
     //Implementando metodos de interfaz
