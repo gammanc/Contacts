@@ -2,6 +2,7 @@ package com.gamma.contacts.fragment;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -51,8 +52,7 @@ public class ListContactFragment extends Fragment implements ContactsAdapter.Con
             mContacts = savedInstanceState.getParcelableArrayList("contacts");
         } else {
             if(Permissions.hasPermission(activity, Manifest.permission.READ_CONTACTS)){
-                mContacts = ContactUtils.getInstace().getContactList();//new ArrayList<Contact>();
-                //loadContactList();
+                mContacts = ContactUtils.getInstace().getContactList();
             } else {
                 Permissions.requestPermissions(this, new String[] {Manifest.permission.READ_CONTACTS}, Permissions.READ_CONTACTS_CODE);
             }
@@ -133,5 +133,21 @@ public class ListContactFragment extends Fragment implements ContactsAdapter.Con
         //TODO: Obtener los contactos del sistema
         contactsAdapter.notifyDataSetChanged();
         super.onResume();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case Permissions.READ_CONTACTS_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    mContacts = ContactUtils.getInstace().getContactList();
+                }
+                else{
+                    mContacts = new ArrayList<>();
+                    Toast.makeText(activity, "No se pudo leer los contactos. Por favor concede el permiso.",
+                            Toast.LENGTH_SHORT);
+                }
+
+        }
     }
 }

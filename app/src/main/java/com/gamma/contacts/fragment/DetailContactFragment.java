@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gamma.contacts.R;
 import com.gamma.contacts.beans.Contact;
@@ -56,6 +57,18 @@ public class DetailContactFragment extends Fragment {
         if(picture != null) contact_picture.setImageBitmap(picture);
         txtName.setText(mContact.getmName());
 
+        loadContactInfo();
+
+        return v;
+    }
+
+    private void findViews(View v){
+        info_container = v.findViewById(R.id.info_container);
+        contact_picture = v.findViewById(R.id.contact_picture);
+        txtName = v.findViewById(R.id.txt_name);
+    }
+
+    private void loadContactInfo(){
         if(mContact.getmNumber() != null){
             View phoneview = mlayoutInflater.inflate(R.layout.contact_info_item, null);
             ImageView icon = phoneview.findViewById(R.id.item_icon);
@@ -66,6 +79,14 @@ public class DetailContactFragment extends Fragment {
 
             TextView subtitle = phoneview.findViewById(R.id.txt_subtitle);
             subtitle.setText("Llamar");
+
+            phoneview.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(activity, "Llamando...", Toast.LENGTH_SHORT).show();
+                }
+            });
+
             info_container.addView(phoneview);
         }
 
@@ -78,19 +99,37 @@ public class DetailContactFragment extends Fragment {
             title.setText(mContact.getmEmail());
 
             TextView subtitle = mailview.findViewById(R.id.txt_subtitle);
-            subtitle.setText("Correo");
+            subtitle.setText(getResources().getString(R.string.form_mail));
 
             info_container.addView(mailview);
         }
 
+        if(mContact.getmAddress() != null && !mContact.getmAddress().equals("")){
+            View addressview = mlayoutInflater.inflate(R.layout.contact_info_item, null);
+            ImageView icon = addressview.findViewById(R.id.item_icon);
+            icon.setImageResource(R.drawable.ic_address);
 
-        return v;
-    }
+            TextView title = addressview.findViewById(R.id.txt_title);
+            title.setText(mContact.getmAddress());
 
-    public void findViews(View v){
-        info_container = v.findViewById(R.id.info_container);
-        contact_picture = v.findViewById(R.id.contact_picture);
-        txtName = v.findViewById(R.id.txt_name);
+            TextView subtitle = addressview.findViewById(R.id.txt_subtitle);
+            subtitle.setText(getResources().getString(R.string.form_address));
+
+            info_container.addView(addressview);
+        }
+        if(mContact.getmBirthday() != null && !mContact.getmBirthday().equals("")){
+            View birthdayview = mlayoutInflater.inflate(R.layout.contact_info_item, null);
+            ImageView icon = birthdayview.findViewById(R.id.item_icon);
+            icon.setImageResource(R.drawable.ic_bday);
+
+            TextView title = birthdayview.findViewById(R.id.txt_title);
+            title.setText(mContact.getmBirthday());
+
+            TextView subtitle = birthdayview.findViewById(R.id.txt_subtitle);
+            subtitle.setText(getResources().getString(R.string.form_birthday));
+
+            info_container.addView(birthdayview);
+        }
     }
 
     public Bitmap getUserImage(){
