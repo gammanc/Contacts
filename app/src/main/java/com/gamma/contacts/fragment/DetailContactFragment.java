@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,12 +21,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gamma.contacts.R;
-import com.gamma.contacts.adapter.ContactsAdapter;
 import com.gamma.contacts.beans.Contact;
 import com.gamma.contacts.utils.ContactUtils;
 import com.gamma.contacts.utils.Permissions;
-
-import java.util.ArrayList;
 
 /**
  * Created by emers on 2/5/2018.
@@ -205,5 +203,11 @@ public class DetailContactFragment extends Fragment {
         }
     }
 
-
+    @Override
+    public void onDetach() {
+        FragmentManager fm = getFragmentManager();
+        TabContactFragment parent = (TabContactFragment) fm.findFragmentByTag(TabContactFragment.ARG_ITEM_ID);
+        parent.setFabVisible(View.VISIBLE);
+        super.onDetach();
+    }
 }

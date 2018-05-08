@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
         mainToolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(mainToolbar);
 
-
         fragmentManager = getSupportFragmentManager();
         fragmentManager.addOnBackStackChangedListener(this);
 

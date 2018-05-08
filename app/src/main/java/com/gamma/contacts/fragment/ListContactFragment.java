@@ -2,9 +2,7 @@ package com.gamma.contacts.fragment;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -50,6 +48,8 @@ public class ListContactFragment extends Fragment implements ContactsAdapter.Con
     LinearLayoutManager gManager;
 
     SharedPreference sharedPreference;
+
+    //TabContactFragment
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -117,7 +117,12 @@ public class ListContactFragment extends Fragment implements ContactsAdapter.Con
 
     @Override
     public void onContactClick(View v, int position) {
+
         FragmentManager fm2 = getFragmentManager();
+
+        parent = (TabContactFragment) fm2.findFragmentByTag(TabContactFragment.ARG_ITEM_ID);
+        parent.setFabVisible(View.GONE);
+
         FragmentTransaction ft2 = fm2.beginTransaction();
         ft2.setCustomAnimations(R.anim.slide_in_down, R.anim.slide_out_down,
                 R.anim.slide_in_down, R.anim.slide_out_down);
@@ -164,7 +169,7 @@ public class ListContactFragment extends Fragment implements ContactsAdapter.Con
 
         final MenuItem searchItem = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        //permite modificar el hint que el EditText muestra por defecto
+
         searchView.setQueryHint(getText(R.string.action_search));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

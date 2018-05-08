@@ -8,16 +8,10 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.gamma.contacts.R;
 import com.gamma.contacts.adapter.ViewPagerAdapter;
@@ -108,6 +102,10 @@ public class TabContactFragment extends Fragment{
             }
         });
 
+    }
+
+    public void setFabVisible(int vis){
+        fab_addPerson.setVisibility(vis);
     }
 
 }
