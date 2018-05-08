@@ -1,8 +1,12 @@
 package com.gamma.contacts.fragment;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,8 +20,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gamma.contacts.R;
+import com.gamma.contacts.adapter.ContactsAdapter;
 import com.gamma.contacts.beans.Contact;
 import com.gamma.contacts.utils.ContactUtils;
+import com.gamma.contacts.utils.Permissions;
+
+import java.util.ArrayList;
 
 /**
  * Created by emers on 2/5/2018.
@@ -34,6 +42,7 @@ public class DetailContactFragment extends Fragment {
     ImageView contact_picture;
     TextView txtName;
 
+    boolean hasPermission;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,12 +87,12 @@ public class DetailContactFragment extends Fragment {
             title.setText(mContact.getmNumber());
 
             TextView subtitle = phoneview.findViewById(R.id.txt_subtitle);
-            subtitle.setText("Llamar");
+            subtitle.setText(getResources().getString(R.string.form_call));
 
             phoneview.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(activity, "Llamando...", Toast.LENGTH_SHORT).show();
+                    makeCall(mContact.getmNumber());
                 }
             });
 
@@ -132,11 +141,48 @@ public class DetailContactFragment extends Fragment {
         }
     }
 
+    public void makeCall(String number) {
+        if (Permissions.hasPermission(activity, Manifest.permission.CALL_PHONE)) {
+            Intent callIntent = new Intent(Intent.ACTION_CALL);
+            callIntent.setData(Uri.fromParts("tel", number, null));
+            startActivity(callIntent);
+        }
+        else if (!hasPermission) {
+            Permissions.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE}, Permissions.CALL_PHONE_CODE);
+        }
+        else {
+            /*Snackbar.make(findViewById(R.id.container_fragment),
+                    getString(R.string.error_permission_call_phone),
+                    Snackbar.LENGTH_LONG).
+                    setAction(getString(R.string.action_enable_in_settings), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            PermissionUtils.goToAppSettings(MainActivity.this);
+                        }
+                    })
+                    .show();*/
+            Toast.makeText(activity, getResources().getString(R.string.call_permission_fail), Toast.LENGTH_SHORT);
+        }
+    }
+
     public Bitmap getUserImage(){
         Bitmap bitmap = null;
         bitmap = BitmapFactory.decodeStream(ContactUtils.getInstace().openPhoto(mContact.getmId()));
         return bitmap;
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case Permissions.CALL_PHONE_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    makeCall(mContact.getmNumber());
+                    hasPermission = false;
+                }
+                else{
+                    hasPermission = true;
+                }
 
+        }
+    }
 }

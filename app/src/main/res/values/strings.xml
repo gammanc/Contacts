@@ -5,9 +5,15 @@
     <string name="tab_favorites">Favoritos</string>
     <string name="form_name">Nombre</string>
     <string name="form_phone">Teléfono</string>
+    <string name="form_call">Llamar</string>
     <string name="form_mail">Correo</string>
     <string name="form_address">Dirección</string>
     <string name="form_birthday">Cumpleaños</string>
     <string name="pick_date">Seleccionar fecha</string>
     <string name="image_picture">Imagen de Usuario</string>
+
+
+    <string name="action_search">Buscar</string>
+    <string name="call_permission_fail">Permisos denegados: No se pudo realizar la llamada.</string>
+    <string name="contacts_permission_fail">Permisos denegados: No se pudo obtener los contactos</string>
 </resources>

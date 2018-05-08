@@ -19,12 +19,12 @@ public class SharedPreference {
     public static final String SHARED_PREFS_NAME = "CONTACT_APP ";
     public static final String FAVS = "CONTACT_Favorite";
 
+
     public SharedPreference(){
         super();
     }
 
     //Los siguientes 4 metodos se usan para manejar los favoritos
-
     public void saveFavorites (Context c, List<Contact> favs){
         SharedPreferences settings;
         SharedPreferences.Editor editor;

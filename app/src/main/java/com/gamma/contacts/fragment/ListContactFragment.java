@@ -71,9 +71,6 @@ public class ListContactFragment extends Fragment implements ContactsAdapter.Con
         gManager = new LinearLayoutManager(container.getContext());
         contactListView.setLayoutManager(gManager);
 
-        //TODO: Obtener los contactos del sistema
-        //setExampleContacts();
-
         contactsAdapter = new ContactsAdapter(activity, mContacts, this);
         contactListView.setAdapter(contactsAdapter);
 
@@ -130,7 +127,6 @@ public class ListContactFragment extends Fragment implements ContactsAdapter.Con
 
     @Override
     public void onResume() {
-        //TODO: Obtener los contactos del sistema
         contactsAdapter.notifyDataSetChanged();
         super.onResume();
     }
@@ -141,6 +137,8 @@ public class ListContactFragment extends Fragment implements ContactsAdapter.Con
             case Permissions.READ_CONTACTS_CODE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     mContacts = ContactUtils.getInstace().getContactList();
+                    contactsAdapter = new ContactsAdapter(activity, mContacts, this);
+                    contactListView.setAdapter(contactsAdapter);
                 }
                 else{
                     mContacts = new ArrayList<>();

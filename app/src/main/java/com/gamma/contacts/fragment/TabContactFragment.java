@@ -60,8 +60,6 @@ public class TabContactFragment extends Fragment {
         //<item name="android:windowContentOverlay">@null</item>
         //getSupportActionBar().setElevation(0);
 
-        //TODO: compartir con los fragment la lista de contactos
-
         fragment_main = new ListContactFragment();
         fragment_favs = new FavoriteListFragment();
 
