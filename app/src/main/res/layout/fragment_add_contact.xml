@@ -161,6 +161,14 @@
                             android:layout_height="wrap_content"
                             android:inputType="none"/>
                     </android.support.design.widget.TextInputLayout>
+
+                    <Button
+                        android:id="@+id/btn_clear"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="right|center"
+                        android:background="@drawable/ic_erase"
+                        android:visibility="gone"/>
                 </LinearLayout>
 
             </LinearLayout>

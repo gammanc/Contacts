@@ -78,7 +78,8 @@ public class DetailContactFragment extends Fragment {
     }
 
     private void loadContactInfo(){
-        if(mContact.getmNumber() != null){
+        boolean flag = false;
+        if(mContact.getmNumber() != null && !mContact.getmNumber().equals("")){
             View phoneview = mlayoutInflater.inflate(R.layout.contact_info_item, null);
             ImageView icon = phoneview.findViewById(R.id.item_icon);
             icon.setImageResource(R.drawable.ic_phone);
@@ -97,6 +98,7 @@ public class DetailContactFragment extends Fragment {
             });
 
             info_container.addView(phoneview);
+            flag = true;
         }
 
         if(mContact.getmEmail() != null && !mContact.getmEmail().equals("")){
@@ -111,6 +113,7 @@ public class DetailContactFragment extends Fragment {
             subtitle.setText(getResources().getString(R.string.form_mail));
 
             info_container.addView(mailview);
+            flag = true;
         }
 
         if(mContact.getmAddress() != null && !mContact.getmAddress().equals("")){
@@ -125,6 +128,7 @@ public class DetailContactFragment extends Fragment {
             subtitle.setText(getResources().getString(R.string.form_address));
 
             info_container.addView(addressview);
+            flag = true;
         }
         if(mContact.getmBirthday() != null && !mContact.getmBirthday().equals("")){
             View birthdayview = mlayoutInflater.inflate(R.layout.contact_info_item, null);
@@ -138,6 +142,21 @@ public class DetailContactFragment extends Fragment {
             subtitle.setText(getResources().getString(R.string.form_birthday));
 
             info_container.addView(birthdayview);
+            flag = true;
+        }
+        if(!flag){
+            View noview = mlayoutInflater.inflate(R.layout.contact_info_item, null);
+
+            ImageView icon = noview.findViewById(R.id.item_icon);
+            icon.setImageResource(R.drawable.ic_erase);
+
+            TextView title = noview.findViewById(R.id.txt_title);
+            title.setText("No se encontró información");
+
+            TextView subtitle = noview.findViewById(R.id.txt_subtitle);
+            subtitle.setText("");
+
+            info_container.addView(noview);
         }
     }
 
@@ -185,4 +204,6 @@ public class DetailContactFragment extends Fragment {
 
         }
     }
+
+
 }

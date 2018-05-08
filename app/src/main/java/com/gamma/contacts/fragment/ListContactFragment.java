@@ -2,6 +2,7 @@ package com.gamma.contacts.fragment;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -44,18 +45,18 @@ public class ListContactFragment extends Fragment implements ContactsAdapter.Con
     RecyclerView contactListView;
     ArrayList<Contact> mContacts;
     ContactsAdapter contactsAdapter;
+
+    TabContactFragment parent;
     LinearLayoutManager gManager;
 
     SharedPreference sharedPreference;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        System.out.println("Realizando on create");
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         activity = getActivity();
         sharedPreference = new SharedPreference();
-
         if(savedInstanceState != null){
             mContacts = savedInstanceState.getParcelableArrayList("contacts");
         } else {
@@ -153,7 +154,6 @@ public class ListContactFragment extends Fragment implements ContactsAdapter.Con
                     Toast.makeText(activity, "No se pudo leer los contactos. Por favor concede el permiso.",
                             Toast.LENGTH_SHORT);
                 }
-
         }
     }
 
@@ -187,16 +187,8 @@ public class ListContactFragment extends Fragment implements ContactsAdapter.Con
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
                     contactsAdapter.restoreList();
-                    //isSearching = false;
                 }
             }
         });
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        contactsAdapter.restoreList();
-        System.out.println("El telefono rotó");
     }
 }

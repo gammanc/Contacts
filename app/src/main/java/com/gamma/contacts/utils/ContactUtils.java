@@ -27,13 +27,25 @@ public class ContactUtils {
     public static final ContactUtils CONTACT_UTILS = new ContactUtils();
     private ArrayList<Contact> mContacts;
     Context context = MainActivity.getContext();
+    int id_gen;
 
     public ContactUtils() {
         loadDeviceContacts();
+        id_gen = 1;
+
     }
 
     public static ContactUtils getInstace(){
         return CONTACT_UTILS;
+    }
+
+    public int generateId(){
+        for (int i = 0; i < mContacts.size(); i++){
+            if(id_gen == Integer.parseInt(mContacts.get(i).getmId())){
+                id_gen++;
+            }
+        }
+        return id_gen;
     }
 
     public void setContactList(ArrayList<Contact> contactList){

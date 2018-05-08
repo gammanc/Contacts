@@ -26,7 +26,7 @@ import com.gamma.contacts.adapter.ViewPagerAdapter;
  * Created by emers on 1/5/2018.
  */
 
-public class TabContactFragment extends Fragment {
+public class TabContactFragment extends Fragment{
 
     public static final String ARG_ITEM_ID = "tab_contact_list";
 
@@ -58,6 +58,7 @@ public class TabContactFragment extends Fragment {
         main_tab = view.findViewById(R.id.main_tablayout);
         main_viewpager = view.findViewById(R.id.main_viewpager);
         fab_addPerson = view.findViewById(R.id.fab_addperson);
+        fab_addPerson.setVisibility(View.VISIBLE);
         adapter = new ViewPagerAdapter(getFragmentManager());
 
         //Eliminado la sombra del ActionBar para Android 5+
@@ -108,4 +109,5 @@ public class TabContactFragment extends Fragment {
         });
 
     }
+
 }
