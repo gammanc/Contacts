@@ -199,7 +199,6 @@ public class DetailContactFragment extends Fragment {
                 else{
                     hasPermission = true;
                 }
-
         }
     }
 
@@ -207,7 +206,7 @@ public class DetailContactFragment extends Fragment {
     public void onDetach() {
         FragmentManager fm = getFragmentManager();
         TabContactFragment parent = (TabContactFragment) fm.findFragmentByTag(TabContactFragment.ARG_ITEM_ID);
-        parent.setFabVisible(View.VISIBLE);
+        if (parent!= null) parent.setFabVisible(View.VISIBLE);
         super.onDetach();
     }
 }

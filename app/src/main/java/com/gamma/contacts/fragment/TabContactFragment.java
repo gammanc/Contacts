@@ -101,11 +101,11 @@ public class TabContactFragment extends Fragment{
                 ft2.commit();
             }
         });
-
     }
 
     public void setFabVisible(int vis){
-        fab_addPerson.setVisibility(vis);
+        if(vis == View.GONE) fab_addPerson.hide();
+        else fab_addPerson.show();
     }
 
 }

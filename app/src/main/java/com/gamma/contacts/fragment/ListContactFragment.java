@@ -134,7 +134,7 @@ public class ListContactFragment extends Fragment implements ContactsAdapter.Con
         addContactFragment.setArguments(bundle);
 
         ft2.addToBackStack(AddContactFragment.ARG_ITEM_ID);
-        ft2.hide(ListContactFragment.this);
+        ft2.hide(fm2.findFragmentByTag(TabContactFragment.ARG_ITEM_ID));
         ft2.add(R.id.contentFrame, addContactFragment);
         ft2.commit();
     }
