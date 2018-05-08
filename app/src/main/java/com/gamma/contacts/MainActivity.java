@@ -1,33 +1,22 @@
 package com.gamma.contacts;
 
 import android.content.Context;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TabLayout;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.widget.Toast;
 
-import com.gamma.contacts.adapter.ViewPagerAdapter;
 import com.gamma.contacts.fragment.DetailContactFragment;
-import com.gamma.contacts.fragment.FavoriteListFragment;
-import com.gamma.contacts.fragment.ListContactFragment;
 import com.gamma.contacts.fragment.TabContactFragment;
 
 public class MainActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener{
 
     public static AppCompatActivity appActivity;
 
-
     private TabContactFragment tabContactFragment;
-    private DetailContactFragment detailContactFragment;
     private Fragment contentF;
     private FragmentManager fragmentManager;
     private Toolbar mainToolbar;
@@ -45,8 +34,10 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
         mainToolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(mainToolbar);
 
+
         fragmentManager = getSupportFragmentManager();
         fragmentManager.addOnBackStackChangedListener(this);
+
         if(savedInstanceState != null){
             if(savedInstanceState.containsKey("myContent")){
                 String content = savedInstanceState.getString("myContent");

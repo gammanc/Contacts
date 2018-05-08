@@ -156,4 +156,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
         mContacts.clear();
         mContacts.addAll(mContactsBack);
     }
+
+    public ArrayList<Contact> getOriginal(){
+        return mContactsBack;
+    }
 }

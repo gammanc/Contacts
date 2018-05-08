@@ -3,6 +3,7 @@ package com.gamma.contacts.fragment;
 import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -49,6 +50,7 @@ public class ListContactFragment extends Fragment implements ContactsAdapter.Con
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        System.out.println("Realizando on create");
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         activity = getActivity();
@@ -86,6 +88,8 @@ public class ListContactFragment extends Fragment implements ContactsAdapter.Con
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        mContacts.clear();
+        mContacts.addAll(contactsAdapter.getOriginal());
         outState.putParcelableArrayList("contacts", (ArrayList) mContacts);
     }
 
@@ -132,7 +136,6 @@ public class ListContactFragment extends Fragment implements ContactsAdapter.Con
     @Override
     public void onResume() {
         contactsAdapter.notifyDataSetChanged();
-        contactsAdapter.restoreList();
         super.onResume();
     }
 
@@ -170,6 +173,7 @@ public class ListContactFragment extends Fragment implements ContactsAdapter.Con
                 //se oculta el EditText
                 searchView.setQuery("", false);
                 searchView.setIconified(true);
+                contactsAdapter.restoreList();
                 return true;
             }
             @Override
@@ -178,5 +182,21 @@ public class ListContactFragment extends Fragment implements ContactsAdapter.Con
                 return true;
             }
         });
+        searchView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    contactsAdapter.restoreList();
+                    //isSearching = false;
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        contactsAdapter.restoreList();
+        System.out.println("El telefono rotó");
     }
 }
