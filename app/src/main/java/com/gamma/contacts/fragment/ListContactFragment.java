@@ -9,9 +9,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -45,6 +50,7 @@ public class ListContactFragment extends Fragment implements ContactsAdapter.Con
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         activity = getActivity();
         sharedPreference = new SharedPreference();
 
@@ -76,8 +82,6 @@ public class ListContactFragment extends Fragment implements ContactsAdapter.Con
 
         return v;
     }
-
-
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -128,6 +132,7 @@ public class ListContactFragment extends Fragment implements ContactsAdapter.Con
     @Override
     public void onResume() {
         contactsAdapter.notifyDataSetChanged();
+        contactsAdapter.restoreList();
         super.onResume();
     }
 
@@ -147,5 +152,31 @@ public class ListContactFragment extends Fragment implements ContactsAdapter.Con
                 }
 
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_search,menu);
+
+        final MenuItem searchItem = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        //permite modificar el hint que el EditText muestra por defecto
+        searchView.setQueryHint(getText(R.string.action_search));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                contactsAdapter.filter(query);
+                //se oculta el EditText
+                searchView.setQuery("", false);
+                searchView.setIconified(true);
+                return true;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                contactsAdapter.filter(newText);
+                return true;
+            }
+        });
     }
 }

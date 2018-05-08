@@ -1,7 +1,6 @@
 package com.gamma.contacts.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +23,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
 
     //Variables de la clase
     private Context mContext;
-    private ArrayList<Contact> mContacts;
+    private ArrayList<Contact> mContacts, mContactsBack;
     SharedPreference sharedPreference;
 
     //Interfaz necesaria para manejar eventos
@@ -39,6 +38,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
         this.mContext = mContext;
         this.mContacts = mContacts;
         this.mListener = mListener;
+        mContactsBack = new ArrayList<>();
+        mContactsBack.addAll(mContacts);
         sharedPreference = new SharedPreference();
     }
 
@@ -134,5 +135,25 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
         //super.remove(product);
         mContacts.remove(contact);
         notifyDataSetChanged();
+    }
+
+    public void filter(String text) {
+        mContacts.clear();
+        if(text.isEmpty()){
+            mContacts.addAll(mContactsBack);
+        } else{
+            text = text.toLowerCase();
+            for(Contact contact: mContactsBack){
+                if(contact.getmName().toLowerCase().contains(text)){
+                    mContacts.add(contact);
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
+
+    public void restoreList(){
+        mContacts.clear();
+        mContacts.addAll(mContactsBack);
     }
 }
